@@ -1,0 +1,54 @@
+.checkout-page { padding: 32px 20px; }
+.checkout-page h1 { font-size: 26px; font-weight: 800; color: var(--green-dark); margin-bottom: 28px; }
+.checkout-layout { display: grid; grid-template-columns: 1fr 360px; gap: 28px; }
+
+.shipping-form, .order-review {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  height: fit-content;
+}
+.shipping-form h2, .order-review h2 { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: var(--text); }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--green); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.payment-method { margin-bottom: 8px; }
+.payment-option {
+  border: 2px solid var(--green);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--green-pale);
+  color: var(--green-dark);
+}
+
+.place-order-btn { width: 100%; margin-top: 20px; padding: 14px; font-size: 16px; }
+.place-order-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.review-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.review-item img { width: 52px; height: 52px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.review-item-info { flex: 1; font-size: 14px; font-weight: 600; }
+.review-item-info .muted { display: block; font-size: 12px; color: var(--text-muted); font-weight: 400; }
+.review-item-price { font-size: 14px; font-weight: 700; color: var(--green-dark); }
+
+.review-totals { margin-top: 16px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
+.summary-row.total { font-size: 17px; font-weight: 800; color: var(--green-dark); border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+
+@media (max-width: 768px) { .checkout-layout { grid-template-columns: 1fr; } }

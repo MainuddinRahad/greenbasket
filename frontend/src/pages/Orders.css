@@ -1,0 +1,69 @@
+.orders-page { padding: 32px 20px; }
+.orders-page h1 { font-size: 26px; font-weight: 800; color: var(--green-dark); margin-bottom: 24px; }
+.orders-empty { text-align: center; padding: 80px 20px; }
+.orders-empty h2 { font-size: 22px; margin-bottom: 16px; }
+
+.order-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.order-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.order-id { font-size: 15px; font-weight: 800; display: block; }
+.order-date { font-size: 13px; color: var(--text-muted); }
+.order-right { display: flex; align-items: center; gap: 12px; }
+.order-total { font-size: 18px; font-weight: 800; color: var(--green-dark); }
+.status-badge { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+
+.tracking-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--gray);
+  border-radius: 10px;
+  overflow-x: auto;
+  gap: 0;
+}
+.tracking-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  min-width: 80px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.tracking-step.done { color: var(--green); }
+.step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: var(--text-muted);
+}
+.tracking-step.done .step-dot { background: var(--green); color: white; }
+.step-line {
+  position: absolute;
+  top: 14px; left: 70%;
+  width: calc(100% - 20px);
+  height: 2px;
+  background: var(--border);
+}
+.step-line.done { background: var(--green); }
+
+.order-items-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.order-item-row {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px;
+}
+.order-item-row img { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; }
+.order-item-row span:nth-child(2) { flex: 1; font-weight: 600; }
+.order-item-row .muted { color: var(--text-muted); }
+
+.order-footer { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px; flex-wrap: wrap; gap: 6px; }

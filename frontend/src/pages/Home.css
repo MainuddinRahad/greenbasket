@@ -1,0 +1,71 @@
+.hero {
+  background: linear-gradient(135deg, #1b5e20 0%, #2d7a22 60%, #4caf50 100%);
+  color: white;
+  padding: 60px 0;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.hero-text h1 { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+.hero-text p { font-size: 17px; opacity: 0.9; margin-bottom: 28px; max-width: 420px; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-btns .btn-primary { background: white; color: var(--green-dark); }
+.hero-btns .btn-primary:hover { background: #f1f8e9; }
+.hero-btns .btn-outline { border-color: white; color: white; }
+.hero-btns .btn-outline:hover { background: white; color: var(--green-dark); }
+.hero-image { font-size: 120px; opacity: 0.3; }
+
+.categories-section { padding: 48px 20px; }
+.categories-section h2, .featured-section h2 { font-size: 26px; font-weight: 800; color: var(--green-dark); margin-bottom: 20px; }
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+  border-radius: var(--radius);
+  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 8px;
+}
+.category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.cat-emoji { font-size: 32px; }
+.cat-name { font-size: 13px; font-weight: 700; color: var(--text); text-align: center; }
+
+.featured-section { padding: 0 20px 48px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.section-header a { color: var(--green); font-weight: 700; font-size: 15px; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.banner { padding: 0 20px 60px; }
+.banner-card {
+  background: var(--green-pale);
+  border-radius: 16px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.banner-card h3 { font-size: 24px; font-weight: 800; color: var(--green-dark); margin-bottom: 8px; }
+.banner-card p { color: var(--text-muted); font-size: 15px; }
+.banner-emoji { font-size: 60px; }
+
+@media (max-width: 768px) {
+  .hero-text h1 { font-size: 28px; }
+  .hero-image { display: none; }
+  .banner-emoji { display: none; }
+  .banner-card { padding: 28px; }
+}

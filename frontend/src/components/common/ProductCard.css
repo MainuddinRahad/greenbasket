@@ -1,0 +1,76 @@
+.product-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+.product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--orange);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.wishlist-btn.active, .wishlist-btn:hover { color: #e53935; }
+
+.product-info { padding: 12px 14px 14px; }
+.product-category { font-size: 11px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.product-name { font-size: 15px; font-weight: 700; color: var(--text); margin: 4px 0 6px; line-height: 1.3; }
+.product-name:hover { color: var(--green); }
+
+.product-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; margin-bottom: 8px; }
+.product-rating .muted { color: var(--text-muted); }
+
+.product-price-row { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-size: 18px; font-weight: 800; color: var(--green-dark); }
+.product-unit { font-size: 12px; color: var(--text-muted); margin-left: 2px; }
+.original-price { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-left: 6px; }
+
+.add-cart-btn {
+  background: var(--green);
+  color: white;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.add-cart-btn:hover:not(:disabled) { background: var(--green-dark); }
+.add-cart-btn:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
