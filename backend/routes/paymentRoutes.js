@@ -7,6 +7,7 @@ const { protect } = require('../middleware/authMiddleware');
 const store_id = process.env.SSLCOMMERZ_STORE_ID;
 const store_passwd = process.env.SSLCOMMERZ_STORE_PASSWORD;
 const is_live = process.env.SSLCOMMERZ_IS_LIVE === 'true';
+const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5000}`;
 
 router.post('/init', protect, async (req, res) => {
   try {
@@ -18,10 +19,10 @@ router.post('/init', protect, async (req, res) => {
       total_amount: order.totalPrice,
       currency: 'BDT',
       tran_id: `GB_${orderId}_${Date.now()}`,
-      success_url: `${process.env.FRONTEND_URL}/payment/success?orderId=${orderId}`,
-      fail_url: `${process.env.FRONTEND_URL}/payment/fail?orderId=${orderId}`,
-      cancel_url: `${process.env.FRONTEND_URL}/payment/cancel?orderId=${orderId}`,
-      ipn_url: `${process.env.FRONTEND_URL}/api/payment/ipn`,
+      success_url: `${backendUrl}/api/payment/success?orderId=${orderId}`,
+      fail_url: `${backendUrl}/api/payment/fail?orderId=${orderId}`,
+      cancel_url: `${backendUrl}/api/payment/cancel?orderId=${orderId}`,
+      ipn_url: `${backendUrl}/api/payment/ipn`,
       shipping_method: 'Courier',
       product_name: 'GreenBasket Order',
       product_category: 'Grocery',
