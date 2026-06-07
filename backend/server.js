@@ -29,8 +29,22 @@ app.use((err, req, res, next) => {
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log('✅ MongoDB connected');
+    const Product = require('./models/Product');
+    const User = require('./models/User');
+    const bcrypt = require('bcryptjs');
+    const count = await Product.countDocuments();
+    if (count === 0) {
+      console.log('🌱 Seeding data...');
+      require('./config/seed');
+    }
+    const adminExists = await User.findOne({ email: 'admin@greenbasket.com' });
+    if (!adminExists) {
+      const hashed = await bcrypt.hash('admin123', 10);
+      await User.create({ name: 'Admin', email: 'admin@greenbasket.com', password: hashed, isAdmin: true });
+      console.log('✅ Admin created');
+    }
     app.listen(process.env.PORT, () => {
       console.log(`✅ Server running at http://localhost:${process.env.PORT}`);
     });
