@@ -35,10 +35,7 @@ mongoose
     const User = require('./models/User');
     const bcrypt = require('bcryptjs');
     const count = await Product.countDocuments();
-    if (count === 0) {
-      console.log('🌱 Seeding data...');
-      require('./config/seed');
-    }
+   
     const adminExists = await User.findOne({ email: 'admin@greenbasket.com' });
     if (!adminExists) {
       const hashed = await bcrypt.hash('admin123', 10);
