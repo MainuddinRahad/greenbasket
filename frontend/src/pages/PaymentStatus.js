@@ -2,6 +2,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 
 export function PaymentSuccess() {
   const [params] = useSearchParams();
+  const sandbox = params.get('sandbox') === 'true';
   return (
     <div style={{ textAlign: 'center', padding: '80px 20px' }}>
       <div style={{ fontSize: 80 }}>✅</div>
@@ -9,7 +10,14 @@ export function PaymentSuccess() {
       <p style={{ color: '#757575', fontSize: 16, marginBottom: 8 }}>
         Order #{params.get('orderId')?.slice(-8).toUpperCase()} has been placed.
       </p>
-      <p style={{ color: '#757575', fontSize: 15, marginBottom: 28 }}>We'll deliver fresh groceries to your door!</p>
+      {sandbox && (
+        <p style={{ color: '#f57c00', fontSize: 15, marginBottom: 28 }}>
+          This is a sandbox/demo payment. The order is marked paid for testing purposes.
+        </p>
+      )}
+      {!sandbox && (
+        <p style={{ color: '#757575', fontSize: 15, marginBottom: 28 }}>We'll deliver fresh groceries to your door!</p>
+      )}
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         <Link to="/orders" className="btn-primary">Track My Order</Link>
         <Link to="/products" className="btn-outline">Continue Shopping</Link>

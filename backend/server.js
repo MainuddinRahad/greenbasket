@@ -1,13 +1,31 @@
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (process.env.NODE_ENV !== 'production') return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -27,23 +45,62 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message || 'Server Error' });
 });
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(async () => {
-    console.log('✅ MongoDB connected');
-    const Product = require('./models/Product');
-    const User = require('./models/User');
-    const bcrypt = require('bcryptjs');
-    const count = await Product.countDocuments();
-   
-    const adminExists = await User.findOne({ email: 'admin@greenbasket.com' });
-    if (!adminExists) {
-      const hashed = await bcrypt.hash('admin123', 10);
-      await User.create({ name: 'Admin', email: 'admin@greenbasket.com', password: hashed, isAdmin: true });
-      console.log('✅ Admin created');
+const atlasUri = process.env.MONGO_URI;
+const localUri = 'mongodb://127.0.0.1:27017/greenbasket';
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+  try {
+    if (atlasUri) {
+      await mongoose.connect(atlasUri);
+      console.log('✅ MongoDB connected: atlas');
+    } else {
+      throw new Error('No Atlas URI provided');
     }
-    app.listen(process.env.PORT, () => {
-      console.log(`✅ Server running at http://localhost:${process.env.PORT}`);
+  } catch (atlasError) {
+    console.error('❌ Atlas connection failed:', atlasError.message);
+    try {
+      await mongoose.connect(localUri);
+      console.log('✅ MongoDB connected: local fallback');
+    } catch (localError) {
+      console.error('❌ Local MongoDB connection failed:', localError.message);
+      process.exit(1);
+    }
+  }
+
+  const Product = require('./models/Product');
+  const User = require('./models/User');
+  const bcrypt = require('bcryptjs');
+  const count = await Product.countDocuments();
+
+  const adminExists = await User.findOne({ email: 'admin@greenbasket.com' });
+  if (!adminExists) {
+    const hashed = await bcrypt.hash('admin123', 10);
+    await User.create({ name: 'Admin', email: 'admin@greenbasket.com', password: hashed, isAdmin: true });
+    console.log('✅ Admin created');
+  }
+
+  const maxPortAttempts = 5;
+  let currentPort = PORT;
+
+  const listenWithRetry = () => {
+    const server = app.listen(currentPort, () => {
+      console.log(`✅ Server running at http://localhost:${currentPort}`);
     });
-  })
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE' && currentPort < PORT + maxPortAttempts) {
+        console.warn(`⚠️ Port ${currentPort} already in use, trying ${currentPort + 1}...`);
+        currentPort += 1;
+        listenWithRetry();
+      } else {
+        console.error('❌ Server failed to start:', err.message);
+        process.exit(1);
+      }
+    });
+  };
+
+  listenWithRetry();
+};
+
+startServer();

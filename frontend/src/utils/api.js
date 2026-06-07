@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: process.env.REACT_APP_API_URL || '/api' });
+const baseURL =
+  process.env.NODE_ENV === 'development'
+    ? '/api'
+    : process.env.REACT_APP_API_URL || '/api';
+
+const API = axios.create({ baseURL });
 
 API.interceptors.request.use((config) => {
   const user = JSON.parse(localStorage.getItem('greenbasket_user') || 'null');

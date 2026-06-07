@@ -7,7 +7,21 @@ const { protect } = require('../middleware/authMiddleware');
 const store_id = process.env.SSLCOMMERZ_STORE_ID;
 const store_passwd = process.env.SSLCOMMERZ_STORE_PASSWORD;
 const is_live = process.env.SSLCOMMERZ_IS_LIVE === 'true';
+const isSandbox = !is_live;
 const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5000}`;
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+const getOrderIdFromRequest = (req) => {
+  if (req.query?.orderId) return req.query.orderId;
+  const tranId = req.body?.tran_id || req.query?.tran_id || '';
+  const parts = tranId.split('_');
+  return parts.length >= 2 ? parts[1] : null;
+};
+
+const redirectFront = (res, path, orderId) => {
+  const query = orderId ? `?orderId=${orderId}` : '';
+  return res.redirect(`${frontendUrl}${path}${query}`);
+};
 
 router.post('/init', protect, async (req, res) => {
   try {
@@ -41,47 +55,64 @@ router.post('/init', protect, async (req, res) => {
       ship_country: 'Bangladesh',
     };
 
+    if (!store_id || !store_passwd || isSandbox) {
+      order.transactionId = data.tran_id;
+      order.paymentStatus = 'Paid';
+      order.orderStatus = 'Confirmed';
+      await order.save();
+      return res.json({ url: `${frontendUrl}/payment/success?orderId=${orderId}&sandbox=true` });
+    }
+
     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
     const apiResponse = await sslcz.init(data);
 
     if (apiResponse?.GatewayPageURL) {
       order.transactionId = data.tran_id;
       await order.save();
-      res.json({ url: apiResponse.GatewayPageURL });
-    } else {
-      res.status(500).json({ message: 'Payment gateway error' });
+      return res.json({ url: apiResponse.GatewayPageURL });
     }
+
+    return res.status(500).json({ message: 'Payment gateway error' });
   } catch (err) {
+    if (!store_id || !store_passwd || isSandbox) {
+      return res.json({ url: `${frontendUrl}/payment/success?orderId=${req.body.orderId}&sandbox=true` });
+    }
     res.status(500).json({ message: err.message });
   }
 });
 
-router.post('/success', async (req, res) => {
-  try {
-    const { val_id, tran_id } = req.body;
-    const orderId = tran_id.split('_')[1];
+const handlePaymentResult = async (req, res, status) => {
+  const orderId = getOrderIdFromRequest(req);
+  if (status === 'success' && orderId) {
     const order = await Order.findById(orderId);
     if (order) {
       order.paymentStatus = 'Paid';
       order.orderStatus = 'Confirmed';
       await order.save();
     }
-    res.redirect(`${process.env.FRONTEND_URL}/payment/success?orderId=${orderId}`);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
   }
-});
 
-router.post('/fail', async (req, res) => {
-  const { tran_id } = req.body;
-  const orderId = tran_id.split('_')[1];
-  res.redirect(`${process.env.FRONTEND_URL}/payment/fail?orderId=${orderId}`);
-});
+  return redirectFront(res, `/payment/${status}`, orderId);
+};
 
-router.post('/cancel', async (req, res) => {
-  const { tran_id } = req.body;
-  const orderId = tran_id ? tran_id.split('_')[1] : '';
-  res.redirect(`${process.env.FRONTEND_URL}/payment/cancel?orderId=${orderId}`);
+router.post('/success', async (req, res) => handlePaymentResult(req, res, 'success'));
+router.get('/success', async (req, res) => handlePaymentResult(req, res, 'success'));
+router.post('/fail', async (req, res) => handlePaymentResult(req, res, 'fail'));
+router.get('/fail', async (req, res) => handlePaymentResult(req, res, 'fail'));
+router.post('/cancel', async (req, res) => handlePaymentResult(req, res, 'cancel'));
+router.get('/cancel', async (req, res) => handlePaymentResult(req, res, 'cancel'));
+
+router.post('/ipn', async (req, res) => {
+  const orderId = getOrderIdFromRequest(req);
+  if (orderId) {
+    const order = await Order.findById(orderId);
+    if (order && req.body?.status === 'VALID') {
+      order.paymentStatus = 'Paid';
+      order.orderStatus = 'Confirmed';
+      await order.save();
+    }
+  }
+  res.status(200).send('IPN received');
 });
 
 module.exports = router;
