@@ -7,28 +7,28 @@ import './Home.css';
 const heroSlides = [
   {
     text: 'Fresh vegetables delivered today',
-    src: 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=900&q=80',
+    src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&h=620&q=80',
     alt: 'Fresh vegetables',
   },
   {
     text: 'Organic fruits handpicked for you',
-    src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80',
+    src: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&h=620&q=80',
     alt: 'Organic fruits',
   },
   {
     text: 'Dairy essentials from trusted farms',
-    src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+    src: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=900&h=620&q=80',
     alt: 'Dairy products',
   },
   {
     text: 'Pantry staples at great prices',
-    src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
+    src: 'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?auto=format&fit=crop&w=900&h=620&q=80',
     alt: 'Pantry staples',
   },
   {
     text: 'Fast delivery across Dhaka',
-    src: 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=900&q=80',
-    alt: 'Delivery box',
+    src: 'https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?auto=format&fit=crop&w=900&h=620&q=80',
+    alt: 'Grocery delivery',
   },
 ];
 
@@ -104,8 +104,8 @@ export default function Home() {
           </div>
           <div className="ad-card-image">
             <img
-              src="https://images.unsplash.com/photo-1512654442044-737261c4f7f2?auto=format&fit=crop&w=520&q=80"
-              alt="Hot sale groceries"
+              src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=520&h=320&q=80"
+              alt="Hot sale groceries banner"
               loading="lazy"
             />
           </div>
