@@ -47,7 +47,7 @@ app.use((err, req, res, next) => {
 
 const atlasUri = process.env.MONGO_URI;
 const localUri = 'mongodb://127.0.0.1:27017/greenbasket';
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 const startServer = async () => {
   try {

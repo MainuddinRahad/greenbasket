@@ -47,7 +47,11 @@ export default function Checkout() {
 
       const { data: payment } = await API.post('/payment/init', { orderId: order._id });
       clearCart();
-      window.location.href = payment.url;
+      if (payment?.url) {
+        window.location.assign(payment.url);
+      } else {
+        throw new Error('Payment redirect failed');
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Order failed');
       setLoading(false);
