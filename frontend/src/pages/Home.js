@@ -4,6 +4,14 @@ import API from '../utils/api';
 import ProductCard from '../components/common/ProductCard';
 import './Home.css';
 
+const heroMessages = [
+  'Fresh vegetables delivered today',
+  'Organic fruits handpicked for you',
+  'Dairy essentials from trusted farms',
+  'Pantry staples at great prices',
+  'Fast delivery across Dhaka',
+];
+
 const categories = [
   { name: 'Vegetables', emoji: '🥦', color: '#e8f5e9' },
   { name: 'Fruits', emoji: '🍎', color: '#fff3e0' },
@@ -18,12 +26,20 @@ const categories = [
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [heroIndex, setHeroIndex] = useState(0);
 
   useEffect(() => {
     API.get('/products/featured').then((res) => {
       setFeatured(res.data);
       setLoading(false);
     }).catch(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroMessages.length);
+    }, 3200);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -33,6 +49,10 @@ export default function Home() {
           <div className="hero-text">
             <h1>Fresh Groceries<br />Delivered Fast 🚀</h1>
             <p>Farm-fresh vegetables, fruits, dairy & more — delivered to your door in Dhaka.</p>
+            <div className="hero-carousel" role="status" aria-live="polite">
+              <span className="hero-carousel-label">Now featuring</span>
+              <span className="hero-carousel-text" key={heroIndex}>{heroMessages[heroIndex]}</span>
+            </div>
             <div className="hero-btns">
               <Link to="/products" className="btn-primary" style={{ fontSize: 16, padding: '12px 32px' }}>
                 Shop Now
@@ -43,6 +63,17 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-image">🛒</div>
+        </div>
+      </section>
+
+      <section className="ad-section container">
+        <div className="ad-card">
+          <div>
+            <p className="ad-label">Hot Sale</p>
+            <h3>Fresh picks at hot prices</h3>
+            <p>Save on seasonal favorites with daily discounts on vegetables, fruits, dairy, and pantry essentials.</p>
+          </div>
+          <Link to="/products" className="btn-outline">Shop Hot Sale</Link>
         </div>
       </section>
 
