@@ -4,12 +4,32 @@ import API from '../utils/api';
 import ProductCard from '../components/common/ProductCard';
 import './Home.css';
 
-const heroMessages = [
-  'Fresh vegetables delivered today',
-  'Organic fruits handpicked for you',
-  'Dairy essentials from trusted farms',
-  'Pantry staples at great prices',
-  'Fast delivery across Dhaka',
+const heroSlides = [
+  {
+    text: 'Fresh vegetables delivered today',
+    src: 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=900&q=80',
+    alt: 'Fresh vegetables',
+  },
+  {
+    text: 'Organic fruits handpicked for you',
+    src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80',
+    alt: 'Organic fruits',
+  },
+  {
+    text: 'Dairy essentials from trusted farms',
+    src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+    alt: 'Dairy products',
+  },
+  {
+    text: 'Pantry staples at great prices',
+    src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
+    alt: 'Pantry staples',
+  },
+  {
+    text: 'Fast delivery across Dhaka',
+    src: 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=900&q=80',
+    alt: 'Delivery box',
+  },
 ];
 
 const categories = [
@@ -37,7 +57,7 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroMessages.length);
+      setHeroIndex((prev) => (prev + 1) % heroSlides.length);
     }, 3200);
     return () => clearInterval(interval);
   }, []);
@@ -51,7 +71,7 @@ export default function Home() {
             <p>Farm-fresh vegetables, fruits, dairy & more — delivered to your door in Dhaka.</p>
             <div className="hero-carousel" role="status" aria-live="polite">
               <span className="hero-carousel-label">Now featuring</span>
-              <span className="hero-carousel-text" key={heroIndex}>{heroMessages[heroIndex]}</span>
+              <span className="hero-carousel-text" key={heroIndex}>{heroSlides[heroIndex].text}</span>
             </div>
             <div className="hero-btns">
               <Link to="/products" className="btn-primary" style={{ fontSize: 16, padding: '12px 32px' }}>
@@ -62,18 +82,33 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="hero-image">🛒</div>
+          <div className="hero-image">
+            <div className="hero-image-frame">
+              <img
+                src={heroSlides[heroIndex].src}
+                alt={heroSlides[heroIndex].alt}
+                loading="eager"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="ad-section container">
         <div className="ad-card">
-          <div>
+          <div className="ad-card-content">
             <p className="ad-label">Hot Sale</p>
             <h3>Fresh picks at hot prices</h3>
             <p>Save on seasonal favorites with daily discounts on vegetables, fruits, dairy, and pantry essentials.</p>
+            <Link to="/products" className="btn-outline">Shop Hot Sale</Link>
           </div>
-          <Link to="/products" className="btn-outline">Shop Hot Sale</Link>
+          <div className="ad-card-image">
+            <img
+              src="https://images.unsplash.com/photo-1512654442044-737261c4f7f2?auto=format&fit=crop&w=520&q=80"
+              alt="Hot sale groceries"
+              loading="lazy"
+            />
+          </div>
         </div>
       </section>
 
