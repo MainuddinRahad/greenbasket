@@ -32,9 +32,13 @@ export default function Products() {
 
   useEffect(() => {
     if (user) {
-      API.get('/wishlist').then((res) => {
-        setWishlistIds(res.data.products?.map((p) => p._id || p) || []);
-      });
+      API.get('/wishlist')
+        .then((res) => {
+          setWishlistIds(res.data.products?.map((p) => p._id || p) || []);
+        })
+        .catch(() => {
+          setWishlistIds([]);
+        });
     }
   }, [user]);
 

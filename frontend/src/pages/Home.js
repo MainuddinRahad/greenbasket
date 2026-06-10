@@ -23,6 +23,24 @@ const categories = [
   { name: 'Organic', emoji: '🌿', color: '#f1f8e9' },
 ];
 
+const homeBenefits = [
+  {
+    title: 'Fresh pick every day',
+    description: 'New stock, seasonal produce, and pantry essentials chosen for quality.',
+    emoji: '✨',
+  },
+  {
+    title: 'Fast local delivery',
+    description: 'Order in the morning and get your groceries delivered without delay.',
+    emoji: '🚚',
+  },
+  {
+    title: 'Trusted by families',
+    description: 'Simple shopping, reliable service, and products people come back for.',
+    emoji: '🏠',
+  },
+];
+
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +95,15 @@ export default function Home() {
           <div className="ad-card-content">
             <p className="ad-label">Hot Sale</p>
             <h3>Fresh picks at hot prices</h3>
-            <p>Save on seasonal favorites with daily discounts on vegetables, fruits, dairy, and pantry essentials.</p>
+            <p>
+              Save on seasonal favorites with daily discounts on vegetables, fruits, dairy,
+              and pantry essentials.
+            </p>
+            <div className="ad-points" aria-label="Hot sale highlights">
+              <span>Daily deals</span>
+              <span>Seasonal savings</span>
+              <span>Limited-time offers</span>
+            </div>
             <Link to="/products" className="btn-outline">Shop Hot Sale</Link>
           </div>
           <div className="ad-card-image">
@@ -89,6 +115,22 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+          <section className="benefits-section container">
+            <div className="section-header">
+              <h2>Why customers shop here</h2>
+              <Link to="/products">Explore Products →</Link>
+            </div>
+            <div className="benefits-grid">
+              {homeBenefits.map((benefit) => (
+                <article className="benefit-card" key={benefit.title}>
+                  <div className="benefit-emoji" aria-hidden="true">{benefit.emoji}</div>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
 
       <section className="categories-section container">
         <h2>Shop by Category</h2>

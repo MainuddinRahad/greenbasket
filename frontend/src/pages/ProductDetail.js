@@ -10,6 +10,8 @@ import './ProductDetail.css';
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [qty, setQty] = useState(1);
   const [reviewText, setReviewText] = useState('');
   const [reviewRating, setReviewRating] = useState(5);
@@ -17,7 +19,27 @@ export default function ProductDetail() {
   const { user } = useAuth();
 
   useEffect(() => {
-    API.get(`/products/${id}`).then((res) => setProduct(res.data));
+    let active = true;
+    setLoading(true);
+    setError('');
+
+    API.get(`/products/${id}`)
+      .then((res) => {
+        if (!active) return;
+        setProduct(res.data);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setError(err.response?.data?.message || 'Unable to load this product right now.');
+        setProduct(null);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [id]);
 
   const handleAddToCart = () => {
@@ -45,7 +67,20 @@ export default function ProductDetail() {
     }
   };
 
-  if (!product) return <div className="page-loader"><div className="spinner"></div></div>;
+  if (loading) return <div className="page-loader"><div className="spinner"></div></div>;
+
+  if (error || !product) {
+    return (
+      <div className="product-detail container">
+        <Link to="/products" className="back-link"><FiArrowLeft /> Back to Products</Link>
+        <div className="detail-error-card">
+          <h1>Product not available</h1>
+          <p>{error || 'The product could not be loaded.'}</p>
+          <Link to="/products" className="btn-primary">Browse Products</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="product-detail container">

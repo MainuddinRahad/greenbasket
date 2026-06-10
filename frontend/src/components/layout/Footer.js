@@ -31,7 +31,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom container">
-        <p>© 2024 GreenBasket. All rights reserved.</p>
+        <p>© 2026 GreenBasket. All rights reserved.</p>
       </div>
     </footer>
   );
